@@ -1,4 +1,4 @@
-package Beta;
+package alpha.dataModel;
 
 import com.profesorfalken.jsensors.JSensors;
 import com.profesorfalken.jsensors.model.components.Components;
@@ -6,53 +6,76 @@ import com.profesorfalken.jsensors.model.components.Cpu;
 import com.profesorfalken.jsensors.model.components.Gpu;
 import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class GPULoadAndTemp implements Runnable {
-    private static List<Gpu> gpus;
-    public static Components components;
-    private static double gpuLoadNowNum;
-    private static double gpuTempNowNum;
+/**
+ * Trida implementujici rozhrani Runnable pro jednoduche pouziti v separatnim vlakne.
+ * Slouzi k zisku teplot CPU a GPU a zateze GPU
+ *
+ * @author Dominik Nedved, A22B0109P
+ * @version 2023.05.11
+ */
+public class LoadAndTemp implements Runnable {
 
-    public static List<Cpu> cpus;
+    /** Instance komponentu (u knihovny JSensors) */
+    private Components components;
 
-    public static double cpuTempNow;
+    /** List s GPU */
+    private List<Gpu> gpus;
 
+    /** Property k zatezi GPU */
+    private final DoubleProperty gpuLoad = new SimpleDoubleProperty();
+
+    /** Property k teplote GPU */
+    private final DoubleProperty gpuTemp = new SimpleDoubleProperty();;
+
+    /** List s CPU */
+    private List<Cpu> cpus;
+
+    /** Property k teplote CPU */
+    private final DoubleProperty cpuTemp = new SimpleDoubleProperty();;
+
+    /**
+     * Kazdou sekundu ziskava aktualni hodnoty pomoci Timeru.
+     * Sledovane hodnoty: Zatez a teplota GPU, teplota CPU
+     */
     public void run() {
-        while (true) {
-            try {
-               //System.out.println("Thread of CPU Temp counter is: " + Thread.currentThread());
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
                 components = JSensors.get.components();
 
                 cpus = components.cpus;
-                cpuTempNow = getCpuTemp(cpus);
+                cpuTemp.set(getCpuTemp(cpus));
 
                 gpus = components.gpus;
-                gpuLoadNowNum = getGpuLoad(gpus);
-                gpuTempNowNum = getGpuTemp(gpus);
-
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                gpuLoad.set(getGpuLoad(gpus));
+                gpuTemp.set(getGpuTemp(gpus));
             }
-        }
+        }, 0, 1000);
     }
 
+    /**
+     * Ziska aktualni teplotu GPU
+     *
+     * @param gpus seznam GPU
+     * @return aktualni teplota GPU
+     */
     private static double getGpuLoad(List<Gpu> gpus) {
         if (gpus != null) {
-            for (final Gpu gpu : gpus) {
-                //System.out.println("Found CPU component: " + gpu.name);
+            for (Gpu gpu : gpus) {
                 if (gpu.sensors != null) {
-                    //System.out.println("Sensors found.");
                     List<Load> gpuLoads = gpu.sensors.loads;
-
-                    // test ziskani jednotlivych hodnot
                     String wantedGpuLoadValue = "Load GPU Core";
                     int i = 0;
                     while (i < gpuLoads.size()) {
                         if (gpuLoads.get(i).name.equals(wantedGpuLoadValue)) {
-                            //System.out.println("Ziskani pouze zateze - uspesne (" + gpuLoads.get(i).name + ": " + gpuLoads.get(i).value + ")");
                             return gpuLoads.get(i).value;
                         }
                         i++;
@@ -63,21 +86,21 @@ public class GPULoadAndTemp implements Runnable {
         return 0;
     }
 
+    /**
+     * Ziska aktualni zatez GPU
+     *
+     * @param gpus sezban GPU
+     * @return aktualni zatez GPU
+     */
     private static double getGpuTemp(List<Gpu> gpus) {
-
         if (gpus != null) {
             for (final Gpu gpu : gpus) {
-                //System.out.println("Found CPU component: " + gpu.name);
                 if (gpu.sensors != null) {
-                    //System.out.println("Sensors found.");
-
                     List<Temperature> temps = gpu.sensors.temperatures;
-                    // test ziskani jednotlivych hodnot
                     String wantedGpuValue = "Temp GPU Core";
                     int i = 0;
                     while (i < temps.size()) {
                         if (temps.get(i).name.equals(wantedGpuValue)) {
-                            //System.out.println("Ziskani pouze teploty - uspesne (" + temps.get(i).name + ": " + temps.get(i).value + ")");
                             return temps.get(i).value;
                         }
                         i++;
@@ -88,22 +111,21 @@ public class GPULoadAndTemp implements Runnable {
         return 0;
     }
 
-    private static double getCpuTemp(List<Cpu> cpus) {
+    /**
+     * Ziska aktualni teplotu CPU
+     *
+     * @param cpus seznam procesoru
+     * @return aktualni teplota CPU
+     */
+    private double getCpuTemp(List<Cpu> cpus) {
         if (cpus != null) {
             for (final Cpu cpu : cpus) {
-                //System.out.println("Found CPU component: " + cpu.name);
                 if (cpu.sensors != null) {
-                    //System.out.println("Sensors found.");
-
-                    System.out.println("Sensors: ");
-
                     List<Temperature> temps = cpu.sensors.temperatures;
-                    // test ziskani jednotlivych hodnot
                     String wantedCpuValue = "Temp CPU Package";
                     int i = 0;
                     while(i < temps.size()) {
                         if(temps.get(i).name.equals(wantedCpuValue)) {
-                            //System.out.println("Ziskani pouze teploty - uspesne (" + temps.get(i).name + ": " + temps.get(i).value + ")");
                             return temps.get(i).value;
                         }
                         i++;
@@ -114,15 +136,30 @@ public class GPULoadAndTemp implements Runnable {
         return 0;
     }
 
-    public double getCpuTempNow() {
-        return cpuTempNow;
+    /**
+     * Getter pro gpuLoadProperty
+     *
+     * @return gpuLoadProperty
+     */
+    public DoubleProperty gpuLoadProperty() {
+        return gpuLoad;
     }
 
-    public double getGpuLoad() {
-        return gpuLoadNowNum;
+    /**
+     * Getter pro gpuTempProperty
+     *
+     * @return gpuTempProperty
+     */
+    public DoubleProperty gpuTempProperty() {
+        return gpuTemp;
     }
 
-    public double getGpuTemp() {
-        return gpuTempNowNum;
+    /**
+     * Getter pro cpuTempProperty
+     *
+     * @return cpuTempProperty
+     */
+    public DoubleProperty cpuTempProperty() {
+        return cpuTemp;
     }
 }

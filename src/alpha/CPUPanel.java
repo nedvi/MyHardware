@@ -1,26 +1,24 @@
-package Beta;
+package alpha;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import alpha.dataModel.LoadAndTemp;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
@@ -28,15 +26,13 @@ import oshi.hardware.CentralProcessor.TickType;
  *
  */
 public class CPUPanel extends BorderPane {
-	//-----------------------------------------------------------------------
+	private final LoadAndTemp loadAndTemp;
 
-	private SystemInfo si = new SystemInfo();
     private long[] oldTicks;
 	private double cpuLoadNowNum;
-	private double cpuTempNow;
+	private final DoubleProperty cpuTempNow = new SimpleDoubleProperty();
 
 	private Gauge cpuTempGauge;
-	private Tile cpuTempTile;
 
 	private Tile cpuLoadTile;
 
@@ -53,8 +49,9 @@ public class CPUPanel extends BorderPane {
 	 *
 	 * @param si
 	 */
-	public CPUPanel(SystemInfo si) {
+	public CPUPanel(SystemInfo si, LoadAndTemp loadAndTemp) {
 		super();
+		this.loadAndTemp = loadAndTemp;
 		try {
 			init(si.getHardware().getProcessor());
 		} catch (Exception e) {
@@ -66,7 +63,7 @@ public class CPUPanel extends BorderPane {
 	/**
 	 * Inicializace
 	 */
-	public void init(CentralProcessor processorCP) throws Exception {
+	public void init(CentralProcessor processorCP) {
 		System.out.println("CPU Panel initialization...");
 		bFill = new BackgroundFill(Color.valueOf("0x2a2a2aff"), null, null);
 		background = new Background(bFill);
@@ -94,15 +91,10 @@ public class CPUPanel extends BorderPane {
 	    cpuLoadTimer.scheduleAtFixedRate(new TimerTask() {
 	        @Override
 	        public void run() {
-	        	javafx.application.Platform.runLater(new Runnable() {
-	                @Override
-	                public void run() {
-	                	cpuLoadNowNum = cpuData(processorCP);
-	            		cpuLoadTile.setValue(cpuLoadNowNum*100);
-						//System.out.println(" - CPU Load: " + cpuLoadNowNum*100);
-
-	                }
-	            });
+	        	javafx.application.Platform.runLater(() -> {
+					cpuLoadNowNum = cpuData(processorCP);
+					cpuLoadTile.setValue(cpuLoadNowNum*100);
+				});
 	        }
 	    }, 0, 1000);
 
@@ -110,33 +102,26 @@ public class CPUPanel extends BorderPane {
 		cpuTempGauge.setThresholdColor(Color.RED);
 		cpuTempGauge.setThreshold(90);
 		cpuTempGauge.setBarColor(Color.RED);
-	    cpuTempTile = TileBuilder.create()
-	                              .prefSize(TILE_SIZE, TILE_SIZE)
-	                              .skinType(Tile.SkinType.CUSTOM)
-	                              .title("CPU Temperature")
-	                              .unit("\u00b0C")
-	                              .text("")
-	                              .graphic(cpuTempGauge)
-	                              .build();
-
-		CPUTemperature cpuTemp = new CPUTemperature();
-		Thread cpuTempThread = new Thread(cpuTemp);
-		cpuTempThread.start();
+		Tile cpuTempTile = TileBuilder.create()
+				.prefSize(TILE_SIZE, TILE_SIZE)
+				.skinType(Tile.SkinType.CUSTOM)
+				.title("CPU Temperature")
+				.unit("\u00b0C")
+				.text("")
+				.graphic(cpuTempGauge)
+				.build();
 
 	    Timer cpuTempTimer = new Timer();
 	    cpuTempTimer.scheduleAtFixedRate(new TimerTask() {
 	        @Override
 	        public void run() {
-	        	javafx.application.Platform.runLater(new Runnable() {
-	                @Override
-	                public void run() {
-						cpuTempNow = cpuTemp.getCpuTempNow();
-	                	cpuTempGauge.setValue(cpuTempNow);
-						System.out.println(" - CPU Temperature: " + cpuTempNow);
-					}
-	            });
+	        	javafx.application.Platform.runLater(() -> {
+					cpuTempNow.bindBidirectional(loadAndTemp.cpuTempProperty());
+					cpuTempGauge.setValue(cpuTempNow.get());
+//					System.out.println(" - CPU Temperature: " + cpuTempNow);
+				});
 	        }
-	    }, 0, 5000);
+	    }, 0, 1000);
 
 		cpuLine.getChildren().addAll(cpuLoadTile, cpuTempTile);
 		cpuLine.setPadding(new Insets(5));
@@ -165,7 +150,7 @@ public class CPUPanel extends BorderPane {
                            .prefSize(TILE_SIZE, TILE_SIZE)
                            .animated(true)
                            //.title("")
-                           .unit("\u00B0C")
+                           .unit("\u00B0C")		// stupen Celsia
                            .valueColor(Tile.FOREGROUND)
                            .titleColor(Tile.FOREGROUND)
                            .unitColor(Tile.FOREGROUND)

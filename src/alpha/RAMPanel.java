@@ -1,4 +1,4 @@
-package Beta;
+package alpha;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,8 +20,9 @@ import oshi.hardware.GlobalMemory;
 public class RAMPanel extends BorderPane {
 	//-----------------------------------------------------------------------
 	private double ramUsageNowNum;
+	final double BILION = 1073741824.0;
 
-	Tile ramTile;
+	private Tile ramTile;
 
 	private Background background;
 	private BackgroundFill bFill;
@@ -45,7 +46,7 @@ public class RAMPanel extends BorderPane {
 	/**
 	 *Inicializace.
 	 */
-	public void init(GlobalMemory memoryGM) throws Exception {
+	public void init(GlobalMemory memoryGM) {
 		System.out.println("RAM Panel initialization...");
 		bFill = new BackgroundFill(Color.valueOf("0x2a2a2aff"), null, null);
 		background = new Background(bFill);
@@ -58,16 +59,9 @@ public class RAMPanel extends BorderPane {
 
 		VBox ramPane = new VBox();
 
-		double bilion = 1000000000.0;
-
 		ramTile = new Tile(Tile.SkinType.CIRCULAR_PROGRESS);
-		//ramTile.setMaxSize(TILE_SIZE, TILE_SIZE);
 		ramTile.setPrefSize(TILE_SIZE, TILE_SIZE);
-		/*
-		ramTile.setTitle("RAM Usage (%)");
-		ramTile.setTitleAlignment(TextAlignment.LEFT);
-		*/
-		ramTile.setMaxValue(memoryGM.getTotal()/bilion);
+		ramTile.setMaxValue(memoryGM.getTotal()/ BILION);
 		ramTile.setThresholdColor(Color.RED);
 		ramTile.setThresholdVisible(true);
 		ramTile.setThreshold(10);
@@ -85,7 +79,7 @@ public class RAMPanel extends BorderPane {
 	        	javafx.application.Platform.runLater(new Runnable() {
 	                @Override
 	                public void run() {
-	                	ramUsageNowNum = getRamUsed(memoryGM)/bilion;
+	                	ramUsageNowNum = getRamUsed(memoryGM)/ BILION;
 	                	ramTile.setValue(ramUsageNowNum);
 	                	}
 	            });
