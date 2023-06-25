@@ -1,4 +1,4 @@
-package alpha;
+package alpha.dataModel;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -14,8 +14,8 @@ import java.util.List;
 
 public class Component {
 
-    double gigabyte = 1073741824;
-    double bilion = 1000000000;
+    final double GIGABYTE = 1073741824;
+    final double BILION = 1000000000;
 
     private String osDescription;
 
@@ -55,7 +55,7 @@ public class Component {
                 "Model: " + cpu.getModel() + "\n" +
                 "Family: " + cpu.getFamily() + "\n" +
                 "Microarchitecture: " + cpu.getMicroarchitecture() + "\n" +
-                "Frequency: " + cpu.getVendorFreq()/bilion + " GHz" + "\n" +
+                "Frequency: " + cpu.getVendorFreq()/BILION + " GHz" + "\n" +
                 "Physical cores: " + si.getHardware().getProcessor().getPhysicalProcessors().size() + "\n" +
                 "Stepping: " + cpu.getStepping() + "\n" +
                 "Processor ID: " + cpu.getProcessorID();
@@ -65,7 +65,7 @@ public class Component {
         for (GraphicsCard graphicsCard : si.getHardware().getGraphicsCards()) {
             String gpuS = graphicsCard.getName() + "\n\n" +
                     "Vendor: " + graphicsCard.getVendor() + "\n" +
-                    "VRAM: " + Math.round(graphicsCard.getVRam() / gigabyte) + " GB\n" +
+                    "VRAM: " + Math.round(graphicsCard.getVRam() / GIGABYTE) + " GB\n" +
                     "Device ID: " + graphicsCard.getDeviceId() + "\n" +
                     graphicsCard.getVersionInfo();
             gpuList.add(gpuS);
@@ -76,7 +76,7 @@ public class Component {
         for (PhysicalMemory ram : si.getHardware().getMemory().getPhysicalMemory()) {
             String ramSB = order + ". - " + ram.getManufacturer() + "\n\n" +
                     "Memory type: " + ram.getMemoryType() + "\n" +
-                    "Capacity: " + Math.round(ram.getCapacity() / gigabyte) + " GB\n" +
+                    "Capacity: " + Math.round(ram.getCapacity() / GIGABYTE) + " GB\n" +
                     "Clock speed: " + ram.getClockSpeed() / 1000000 + " MHz\n\n" +
                     "-------------------------------------\n\n";
             ramList.add(ramSB);
@@ -86,7 +86,7 @@ public class Component {
         // Disks
         for (HWDiskStore disk : si.getHardware().getDiskStores()) {
             String diskSB = disk.getModel() + "\n\n" +
-                    "Size: " + Math.round(disk.getSize() / gigabyte) + " GB\n" +
+                    "Size: " + Math.round(disk.getSize() / GIGABYTE) + " GB\n" +
                     "Serial: " + disk.getSerial() + "\n";
             diskList.add(diskSB);
         }
@@ -140,7 +140,6 @@ public class Component {
     public String getDiskDescription(String diskName) {
 
         for (String disk : diskList) {
-            System.out.println(disk.split("\n")[0]);
             if (disk.split("\n")[0].equals(diskName)) {
                 return disk;
             }
@@ -158,7 +157,6 @@ public class Component {
 
     public String getPowerSourceDescription(String powerSourceName) {
         for (String powerSource : powerSourceList) {
-            System.out.println(powerSource.split("\n")[0]);
             if (powerSource.split("\n")[0].equals(powerSourceName)) {
                 return powerSource;
             }
@@ -168,7 +166,6 @@ public class Component {
 
     public String getUsbDeviceDescription(String usbDeviceName) {
         for (String usbDevice : usbDevicesList) {
-            System.out.println(usbDevice.split("\n")[0]);
             if (usbDevice.split("\n")[0].equals(usbDeviceName)) {
                 return usbDevice;
             }

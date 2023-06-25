@@ -29,6 +29,14 @@ public class GPUPanel extends BorderPane {
 
 	private static final Label GPU_LABEL = new Label("GPU Status");
 	private static final double TILE_SIZE = 250;
+	private Background tileBackground;
+	private Tile gpuLoadTile;
+
+	private Gauge gpuTempGauge;
+	private Tile gpuTempTile;
+
+	private VBox gpuPaneVB;
+	private HBox gpuStatsHB;
 
 	//=====================================================================
 
@@ -54,17 +62,16 @@ public class GPUPanel extends BorderPane {
 	public void init() {
 		System.out.println("GPU Panel initialization...");
 
-		BackgroundFill tileBFill = new BackgroundFill(Color.valueOf("#1c1c1b"), new CornerRadii(5), null);
-		Background tileBackground = new Background(tileBFill);
+		tileBackground = new Background(Config.tileBFill);
 
 		GPU_LABEL.setFont(Font.font(30));
 		GPU_LABEL.setTextFill(Color.WHITE);
 
-		VBox gpuPaneVB = new VBox();
-		HBox gpuStatsHB = new HBox();
+		gpuPaneVB = new VBox();
+		gpuStatsHB = new HBox();
 
 
-		Tile gpuLoadTile = TileBuilder.create()
+		gpuLoadTile = TileBuilder.create()
 				.skinType(Tile.SkinType.GAUGE)
 				.title("GPU Usage (%)")
 				.needleColor(Color.valueOf("0x37b3fcff"))
@@ -72,9 +79,9 @@ public class GPUPanel extends BorderPane {
 				.threshold(90)
 				.build();
 
-		Gauge gpuTempGauge = createGpuTempGauge();
+		gpuTempGauge = createGpuTempGauge();
 
-		Tile gpuTempTile = TileBuilder.create()
+		gpuTempTile = TileBuilder.create()
 				.prefSize(TILE_SIZE, TILE_SIZE)
 				.skinType(Tile.SkinType.CUSTOM)
 				.title("GPU Temperature")
@@ -144,4 +151,21 @@ public class GPUPanel extends BorderPane {
 				           .barColor(Color.RED)
                            .build();
     }
+
+	public void refreshStyleSheet() {
+
+		tileBackground = Config.TILE_BACKGROUND;
+		gpuStatsHB.setBackground(tileBackground);
+		gpuPaneVB.setBackground(tileBackground);
+		GPU_LABEL.setTextFill(Config.TEXT_COLOR);
+
+		gpuLoadTile.setBackgroundColor(Config.TILE_SECONDARY_COLOR);
+		gpuLoadTile.setValueColor(Config.TEXT_COLOR);
+		gpuLoadTile.setTitleColor(Config.TEXT_COLOR);
+		gpuTempTile.setBackgroundColor(Config.TILE_SECONDARY_COLOR);
+		gpuTempTile.setTitleColor(Config.TEXT_COLOR);
+		gpuTempGauge.setValueColor(Config.TEXT_COLOR);
+		gpuTempGauge.setUnitColor(Config.TEXT_COLOR);
+		gpuTempGauge.setBarBackgroundColor(Config.TILE_COLOR);
+	}
 }

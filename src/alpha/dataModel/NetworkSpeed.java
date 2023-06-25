@@ -33,6 +33,11 @@ public class NetworkSpeed implements Runnable {
     /** Promenna pro ukladani casove znamky pro posledni download */
     private long timestamp1 = 0;
 
+    private final DoubleProperty upload = new SimpleDoubleProperty();
+
+    /** Promenna pro ukladani posledniho downloadu v okamzitem case */
+    private long upload1 = 0;
+
     /**
      * Konstruktor
      *
@@ -86,27 +91,40 @@ public class NetworkSpeed implements Runnable {
     /**
      * Kazdou sekundu ziskava aktualni hodnotu downloadu pomoci Timeru.
      */
-    @Override
     public void run() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                NetworkIF activeNetworkAdapter = activeNetworkIF();
-                activeNetworkAdapter.updateAttributes();
+                try {
+                    NetworkIF activeNetworkAdapter = activeNetworkIF();
+                    activeNetworkAdapter.updateAttributes();
+                    long download2 = activeNetworkAdapter.getBytesRecv();
+                    long upload2 = activeNetworkAdapter.getBytesSent();
+                    long timestamp2 = activeNetworkAdapter.getTimeStamp();
 
-                long download2 = activeNetworkAdapter.getBytesRecv();
-                long timestamp2 = activeNetworkAdapter.getTimeStamp();
+                    download.set((double) (download2 - download1) / (timestamp2 - timestamp1));
+                    upload.set((double) (upload2 - upload1) / (timestamp2 - timestamp1));
 
-                download.set((double) (download2 - download1) / (timestamp2 - timestamp1));
+//                    System.out.println("Download" + download);
+//                    System.out.println("Network " + Thread.currentThread());
+                    download1 = activeNetworkAdapter.getBytesRecv();
+                    upload1 = activeNetworkAdapter.getBytesSent();
+                    timestamp1 = activeNetworkAdapter.getTimeStamp();
 
-                download1 = activeNetworkAdapter.getBytesRecv();
-                timestamp1 = activeNetworkAdapter.getTimeStamp();
+                } catch (NullPointerException e) {
+                    System.out.println("Neni dostupne pripojeni z zadneho zapnuteho adapteru.");
+                }
+
             }
         }, 0, 1000);
     }
 
     public DoubleProperty downloadProperty() {
         return download;
+    }
+
+    public DoubleProperty uploadProperty() {
+        return upload;
     }
 }

@@ -32,12 +32,14 @@ public class CPUPanel extends BorderPane {
 	private double cpuLoadNowNum;
 	private final DoubleProperty cpuTempNow = new SimpleDoubleProperty();
 
+	private Tile cpuTempTile;
 	private Gauge cpuTempGauge;
 
 	private Tile cpuLoadTile;
 
-	private Background background;
-	private BackgroundFill bFill;
+	private VBox cpuPaneVB;
+	private HBox cpuLine;
+
 	private BackgroundFill tileBFill;
 	private Background tileBackground;
 	//-----------------------------------------------------------------------
@@ -65,17 +67,14 @@ public class CPUPanel extends BorderPane {
 	 */
 	public void init(CentralProcessor processorCP) {
 		System.out.println("CPU Panel initialization...");
-		bFill = new BackgroundFill(Color.valueOf("0x2a2a2aff"), null, null);
-		background = new Background(bFill);
 
-		tileBFill = new BackgroundFill(Color.valueOf("#1c1c1b"), new CornerRadii(5), null);
-		tileBackground = new Background(tileBFill);
+		tileBackground = Config.TILE_BACKGROUND;
 
 		CPU_LABEL.setFont(Font.font(30));
 		CPU_LABEL.setTextFill(Color.WHITE);
 
-		VBox cpuPaneVB = new VBox();
-		HBox cpuLine = new HBox();
+		cpuPaneVB = new VBox();
+		cpuLine = new HBox();
 
         oldTicks = new long[TickType.values().length];
 
@@ -102,7 +101,8 @@ public class CPUPanel extends BorderPane {
 		cpuTempGauge.setThresholdColor(Color.RED);
 		cpuTempGauge.setThreshold(90);
 		cpuTempGauge.setBarColor(Color.RED);
-		Tile cpuTempTile = TileBuilder.create()
+
+		cpuTempTile = TileBuilder.create()
 				.prefSize(TILE_SIZE, TILE_SIZE)
 				.skinType(Tile.SkinType.CUSTOM)
 				.title("CPU Temperature")
@@ -164,5 +164,22 @@ public class CPUPanel extends BorderPane {
                            .mediumTickMarkColor(Tile.FOREGROUND)
                            .build();
     }
+
+	public void refreshStyleSheet() {
+
+		tileBackground = Config.TILE_BACKGROUND;
+		cpuLine.setBackground(tileBackground);
+		cpuPaneVB.setBackground(tileBackground);
+		CPU_LABEL.setTextFill(Config.TEXT_COLOR);
+
+		cpuLoadTile.setBackgroundColor(Config.TILE_SECONDARY_COLOR);
+		cpuLoadTile.setValueColor(Config.TEXT_COLOR);
+		cpuLoadTile.setTitleColor(Config.TEXT_COLOR);
+		cpuTempTile.setBackgroundColor(Config.TILE_SECONDARY_COLOR);
+		cpuTempTile.setTitleColor(Config.TEXT_COLOR);
+		cpuTempGauge.setValueColor(Config.TEXT_COLOR);
+		cpuTempGauge.setUnitColor(Config.TEXT_COLOR);
+		cpuTempGauge.setBarBackgroundColor(Config.TILE_COLOR);
+	}
 
 }

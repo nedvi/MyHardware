@@ -23,7 +23,7 @@ public class RAMPanel extends BorderPane {
 	final double BILION = 1073741824.0;
 
 	private Tile ramTile;
-
+	private VBox ramPane;
 	private Background background;
 	private BackgroundFill bFill;
 	private BackgroundFill tileBFill;
@@ -57,10 +57,10 @@ public class RAMPanel extends BorderPane {
 		RAM_LABEL.setFont(Font.font(30));
 		RAM_LABEL.setTextFill(Color.WHITE);
 
-		VBox ramPane = new VBox();
+		ramPane = new VBox();
 
 		ramTile = new Tile(Tile.SkinType.CIRCULAR_PROGRESS);
-		ramTile.setPrefSize(TILE_SIZE, TILE_SIZE);
+		ramTile.setPrefSize(500, TILE_SIZE);
 		ramTile.setMaxValue(memoryGM.getTotal()/ BILION);
 		ramTile.setThresholdColor(Color.RED);
 		ramTile.setThresholdVisible(true);
@@ -97,5 +97,19 @@ public class RAMPanel extends BorderPane {
 
 	private static double getRamUsed(GlobalMemory memory) {
 		return ( (memory.getTotal() - (memory.getAvailable())));
+	}
+
+	public void refreshStyleSheet() {
+
+		tileBackground = Config.TILE_BACKGROUND;
+		ramPane.setBackground(tileBackground);
+		ramPane.setBackground(tileBackground);
+		RAM_LABEL.setTextFill(Config.TEXT_COLOR);
+
+		ramTile.setBackgroundColor(Config.TILE_SECONDARY_COLOR);
+		ramTile.setValueColor(Config.TEXT_COLOR);
+		ramTile.setTitleColor(Config.TEXT_COLOR);
+		ramTile.setBarBackgroundColor(Config.TILE_COLOR);
+		ramTile.setUnitColor(Config.TEXT_COLOR);
 	}
 }

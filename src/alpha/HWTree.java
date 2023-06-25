@@ -1,14 +1,12 @@
 package alpha;
 
+import alpha.dataModel.Component;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import oshi.SystemInfo;
 import oshi.hardware.GraphicsCard;
 import oshi.hardware.HWDiskStore;
@@ -29,6 +27,8 @@ public class HWTree extends BorderPane {
     public Component components;
 
     private VBox componentInfoVB;
+
+    private Label shownComponentLabel = new Label();
 
     private String getComponentDescription(String componentCategory, String componentName) {
         if (componentName.equals("Operating system")) {
@@ -53,22 +53,20 @@ public class HWTree extends BorderPane {
     public HWTree() {
         super();
         this.setPadding(new Insets(5));
-        this.setBackground(Config.BACKGROUND);
+
+
         init();
-        Label shownComponentLabel = new Label();
+
         componentTreeView.setOnMouseReleased(event -> {
             TreeItem<String> focusedTI = componentTreeView.getSelectionModel().getSelectedItem();
             try {
                 shownComponentLabel.setText(getComponentDescription(focusedTI.getParent().getValue(), focusedTI.getValue()));
-                shownComponentLabel.setStyle("-fx-text-fill: WHITE;");
-                shownComponentLabel.setFont(Font.font("Helvetica", 15));
+//                shownComponentLabel.setFont(Font.font("Helvetica", 15));
                 shownComponentLabel.setPadding(new Insets(10));
 
 
-                componentInfoVB.getChildren().addAll(shownComponentLabel);
-                componentInfoVB.setSpacing(5);
             } catch (Exception e) {
-                System.out.println("Nebyla vybrana zadna polozka stromu.");
+//                System.out.println("Nebyla vybrana zadna polozka stromu.");
             }
         });
     }
@@ -88,8 +86,8 @@ public class HWTree extends BorderPane {
         componentInfoVB = new VBox();
 
         componentInfoVB.setSpacing(5);
-
-        componentInfoVB.setBackground(new Background(new BackgroundFill(Color.valueOf("#1c1c1b"), new CornerRadii(5), null)));
+        componentInfoVB.getChildren().addAll(shownComponentLabel);
+//        componentInfoVB.setBackground(new Background(new BackgroundFill(Color.valueOf("#1c1c1b"), new CornerRadii(5), null)));
 
         return componentInfoVB;
     }
@@ -143,10 +141,25 @@ public class HWTree extends BorderPane {
         rootTI.getChildren().addAll(osTI, cpuCategoryTI, gpuCategoryTI, ramCategoryTI, diskCategoryTI, powerSourceCategoryTI, usbDevicesCategoryTI);
 
         componentTreeView.setRoot(rootTI);
-        componentTreeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        componentTreeView.getStylesheets().add(Config.ACTIVE_STYLE_SHEET);
         componentTreeView.setMinWidth(450);
 
         return componentTreeView;
+    }
+
+    /**
+     * Provede refresh style sheetu CSS.
+     * Vola se pokazde pri prepnuti konkretniho panelu. Je tak osetreno, ze style sheet bude aktualni pri zmene motivu.
+     */
+    public void refreshStyleSheet() {
+        this.getStylesheets().clear();
+        this.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
+        this.getStyleClass().add("hwTree");
+
+        componentTreeView.getStylesheets().clear();
+        componentTreeView.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
+
+        componentInfoVB.getStylesheets().clear();
+        componentInfoVB.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
+        componentInfoVB.getStyleClass().add("hwTreeComponentInfo");
     }
 }

@@ -23,6 +23,17 @@ public class Dashboard extends BorderPane {
     /** Instance */
     private final LoadAndTemp loadAndTemp;
 
+    private CPUPanel cpuPanel;
+    private GPUPanel gpuPanel;
+    private RAMPanel ramPanel;
+    private NetworkPanel networkPanel;
+
+    private HBox dashBoardPaneVB;
+
+    private VBox cpuRamHB;
+
+    private VBox gpuNetworkHB;
+
     /**
      * Konstruktor Dashboardu
      *
@@ -42,21 +53,21 @@ public class Dashboard extends BorderPane {
      * @return dashboard
      */
     private Node getDashboard() {
-        HBox dashBoardPaneVB = new HBox();
+        dashBoardPaneVB = new HBox();
 
-        CPUPanel cpuPanel = new CPUPanel(si, loadAndTemp);
-        GPUPanel gpuPanel = new GPUPanel(loadAndTemp);
-        RAMPanel ramPanel = new RAMPanel(si);
-        NetworkPanel networkPanel = new NetworkPanel(si);
+        cpuPanel = new CPUPanel(si, loadAndTemp);
+        gpuPanel = new GPUPanel(loadAndTemp);
+        ramPanel = new RAMPanel(si);
+        networkPanel = new NetworkPanel(si);
 
-        VBox cpuRamHB = new VBox();
+        cpuRamHB = new VBox();
         cpuRamHB.getChildren().addAll(cpuPanel, ramPanel);
         cpuRamHB.setPadding(new Insets(5));
         cpuRamHB.setSpacing(5);
         cpuRamHB.setAlignment(Pos.TOP_CENTER);
         cpuRamHB.setBackground(Config.BACKGROUND);
 
-        VBox gpuNetworkHB = new VBox();
+        gpuNetworkHB = new VBox();
         gpuNetworkHB.getChildren().addAll(gpuPanel, networkPanel);
         gpuNetworkHB.setPadding(new Insets(5));
         gpuNetworkHB.setSpacing(5);
@@ -67,8 +78,18 @@ public class Dashboard extends BorderPane {
         dashBoardPaneVB.setPadding(new Insets(5));
         dashBoardPaneVB.setSpacing(5);
         dashBoardPaneVB.setAlignment(Pos.CENTER);
-        dashBoardPaneVB.setBackground(Config.BACKGROUND);
 
         return dashBoardPaneVB;
+    }
+
+    public void refreshStyleSheet() {
+        dashBoardPaneVB.setBackground(Config.DASHBOARD_BACKGROUND);
+        cpuRamHB.setBackground(Config.DASHBOARD_BACKGROUND);
+        gpuNetworkHB.setBackground(Config.DASHBOARD_BACKGROUND);
+
+        cpuPanel.refreshStyleSheet();
+        gpuPanel.refreshStyleSheet();
+        ramPanel.refreshStyleSheet();
+        networkPanel.refreshStyleSheet();
     }
 }

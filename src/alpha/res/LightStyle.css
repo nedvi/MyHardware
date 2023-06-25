@@ -1,0 +1,101 @@
+
+.settings {
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
+}
+
+.settings .label {
+    -fx-text-fill: BLACK;
+}
+
+.menu {
+    -fx-text-fill: BLACK;
+    -fx-background-color: LIGHTGREY;
+    -fx-spacing: 2;
+}
+
+.menu .button {
+    -fx-text-fill: BLACK;
+    -fx-background-color: #a3a3a3;
+    -fx-font-size: 15px;
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold;
+}
+
+.menu .label {
+    -fx-text-fill: BLACK;
+    -fx-background-color: LIGHTGREY;
+    -fx-font-size: 20px;
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold;
+}
+
+.dashboard {
+    -fx-background-color: WHITE;
+}
+
+.hwTree {
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
+}
+
+.hwTreeComponentInfo {
+    -fx-background-color: LIGHTGREY;
+    -fx-text-fill: BLACK;
+}
+
+.hwTreeComponentInfo .label {
+    -fx-font-size: 15px;
+    -fx-text-fill: BLACK;
+    -fx-font-family: 'Helvetica';
+}
+
+.tree-view {
+    -fx-background-color: WHITE;
+}
+
+.tree-cell {
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
+    -fx-font-size: 14px;
+}
+
+.tree-view:focused .tree-cell:filled:selected {
+    -fx-background-color: LIGHTGREY;
+}
+
+.tree-cell:filled:selected{
+    -fx-background-color: WHITE;
+}
+
+.alertDP {
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
+}
+
+.alertDP .button {
+    -fx-background-color: LIGHTGREY;
+    -fx-fill: BLACK;
+    -fx-text-fill: BLACK;
+}
+
+.alertDP > *.label.content{
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-fill: WHITE;
+    -fx-text-fill: BLACK;
+    -fx-font-family: 'Helvetica';
+}
+
+.alertDP > .header-panel {
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
+    -fx-font-family: 'Helvetica';
+}
+
+.alertDP > .header-panel > .label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: BLACK;
+    -fx-font-family: 'Helvetica';
+}

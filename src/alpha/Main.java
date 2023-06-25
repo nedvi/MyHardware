@@ -51,9 +51,11 @@ public class Main extends Application {
 	public Button settingsBTN;
 	public Button aboutBTN;
 
+	private Dashboard dashboard;
+
 	private HWTree hwTree;
 
-	private Dashboard dashboard;
+	private Settings settings;
 
 	private Label upTimeLabel = new Label("00:00:00");
 	private Timer upTimeTimer = new Timer();
@@ -81,11 +83,15 @@ public class Main extends Application {
 		si = new SystemInfo();
 
 		loadAndTemp = new LoadAndTemp();
-		loadAndTemp.run();
+		Thread loadAndTempThread = new Thread(loadAndTemp);
+		System.out.println("Load nad temp " + loadAndTempThread.getName());
+		loadAndTempThread.start();
 
 		dashboard = new Dashboard(si, loadAndTemp);
 
 		hwTree = new HWTree();
+
+		settings = new Settings();
 
 		background = Config.BACKGROUND;
 		buttonBackground = Config.BTN_BACKGROUND;;
@@ -132,6 +138,7 @@ public class Main extends Application {
 		rootPaneBP = new BorderPane();
 		rootPaneBP.setTop(getTopBar());
 		rootPaneBP.setCenter(dashboard);
+		dashboard.refreshStyleSheet();
 		return rootPaneBP;
 	}
 
@@ -142,86 +149,66 @@ public class Main extends Application {
 	 */
 	private Node getTopBar() {
 		HBox topPaneHB = new HBox();
+		topPaneHB.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
+		topPaneHB.getStyleClass().add("menu");
 
-		Label TITLE = new Label("- My Hardware -");
-		TITLE.setFont(Font.font("Helvetica", FontWeight.BOLD , 40));
-		TITLE.setBackground(background);
-		TITLE.setAlignment(Pos.CENTER);
-		TITLE.setTextFill(Color.valueOf("0x37b3fcff"));
-
-		Label settingsLabel = new Label("Settings");
-		settingsLabel.setStyle("-fx-text-fill: WHITE;");
-		settingsLabel.setFont(Font.font("Helvetica", 15));
-		Label aboutLabel = new Label("About");
-		aboutLabel.setStyle("-fx-text-fill: WHITE;");
-		aboutLabel.setFont(Font.font("Helvetica", 15));
-
-		HBox topBarHB = new HBox();
+		Config.ACTIVE_STYLE_SHEET.addListener(observable -> {
+			topPaneHB.getStylesheets().clear();
+			topPaneHB.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
+			topPaneHB.getStyleClass().add("menu");
+		});
 
 		dashboardBTN.setText("Dashboard");
-		dashboardBTN.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-		dashboardBTN.setBackground(buttonBackground);
-		dashboardBTN.setTextFill(Color.valueOf("0x37b3fcff"));
 
 		dashboardBTN.setOnAction(e -> {
-			if (rootPaneBP.getCenter()!=dashboard) {
+			if (rootPaneBP.getCenter() != dashboard) {
+				dashboard.refreshStyleSheet();
 				rootPaneBP.setCenter(dashboard);
 				dashboardBTN.setDisable(true);
 				hwTreeBTN.setDisable(false);
+				settingsBTN.setDisable(false);
 			}
 		});
 
 		hwTreeBTN = new Button();
 		hwTreeBTN.setText("HW Tree");
-		hwTreeBTN.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-		hwTreeBTN.setBackground(buttonBackground);
-		hwTreeBTN.setTextFill(Color.valueOf("0x37b3fcff"));
 
 		hwTreeBTN.setOnAction(e -> {
-			if (rootPaneBP.getCenter()!= hwTree) {
+			if (rootPaneBP.getCenter() != hwTree) {
+				hwTree.refreshStyleSheet();	// zavola update styleSheetu
 				rootPaneBP.setCenter(hwTree);
 				hwTreeBTN.setDisable(true);
 				dashboardBTN.setDisable(false);
+				settingsBTN.setDisable(false);
 			}
 		});
 
 		settingsBTN = new Button();
 		settingsBTN.setText("Settings");
-		settingsBTN.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-		settingsBTN.setBackground(buttonBackground);
-		settingsBTN.setTextFill(Color.valueOf("0x37b3fcff"));
+
+		settingsBTN.setOnAction(e -> {
+			if (rootPaneBP.getCenter() != settings) {
+				rootPaneBP.setCenter(settings);
+				settingsBTN.setDisable(true);
+				dashboardBTN.setDisable(false);
+				hwTreeBTN.setDisable(false);
+			}
+		});
 
 		aboutBTN = new Button();
 		aboutBTN.setText("About");
-		aboutBTN.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-		aboutBTN.setBackground(buttonBackground);
-		aboutBTN.setTextFill(Color.valueOf("0x37b3fcff"));
 
 		aboutBTN.setOnAction(e -> about());
 
 		AnchorPane apLeft = new AnchorPane();
 		HBox.setHgrow(apLeft, Priority.ALWAYS);	// pro posunuti Up-Timu doprava
-		topBarHB.getChildren().addAll(dashboardBTN, hwTreeBTN, settingsBTN, aboutBTN);
-
-		topBarHB.setPadding(new Insets(5));
-		topBarHB.setBackground(DARKER_BACKGROUND);
 
 		AnchorPane apRight = new AnchorPane();
 
 		upTimeLabel = new Label();
-		upTimeLabel.setAlignment(Pos.CENTER_RIGHT);
-		upTimeLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
-		upTimeLabel.setTextFill(Color.valueOf("0x37b3fcff"));
-		upTimeLabel.setPadding(new Insets(5));
 
-		HBox upTimeHB = new HBox(upTimeLabel);
-		upTimeHB.setAlignment(Pos.CENTER_RIGHT);
-		upTimeHB.setBackground(DARKER_BACKGROUND);
-
-		apRight.getChildren().addAll(upTimeHB);
-		topPaneHB.getChildren().addAll(topBarHB, apLeft, apRight);
-		topPaneHB.setSpacing(5);
-		topPaneHB.setBackground(DARKER_BACKGROUND);
+		apRight.getChildren().addAll(upTimeLabel);
+		topPaneHB.getChildren().addAll(dashboardBTN, hwTreeBTN, settingsBTN, aboutBTN, apLeft, apRight);
 		topPaneHB.setAlignment(Pos.CENTER);
 
 		return topPaneHB;
@@ -234,7 +221,7 @@ public class Main extends Application {
 		String aboutAuthorSB =
 				"Author:\t\t\tDominik Nedved\n" +
 				"Study number:\t\tA22B0109P\n" +
-				"Discord:\t\t\tNedvi#5232\n" +
+				"Discord:\t\t\tnedvi\n" +
 				"\nFaculty of Applied Sciences\n" +
 				"University of West Bohemia";
 
@@ -243,7 +230,7 @@ public class Main extends Application {
 		aboutAlert.setHeaderText("About");
 		aboutAlert.setContentText(aboutAuthorSB);
 		DialogPane alertDP = aboutAlert.getDialogPane();
-		alertDP.getStylesheets().add(Config.ACTIVE_STYLE_SHEET);
+		alertDP.getStylesheets().add(Config.ACTIVE_STYLE_SHEET.get());
 		alertDP.getStyleClass().add("alertDP");
 
 		aboutAlert.show();
