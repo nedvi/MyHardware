@@ -1,4 +1,4 @@
-package alpha.dataModel;
+package dataModel;
 
 import com.profesorfalken.jsensors.JSensors;
 import com.profesorfalken.jsensors.model.components.Components;

@@ -1,4 +1,4 @@
-package alpha.dataModel;
+package dataModel;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -62,7 +62,6 @@ public class NetworkSpeed implements Runnable {
         try {
             netifs = NetworkInterface.getNetworkInterfaces();
 
-            // hostname is passed to your method
             String hostname = InetAddress.getLocalHost().getHostName();
             InetAddress myAddr = InetAddress.getByName(hostname);
 
@@ -75,7 +74,6 @@ public class NetworkSpeed implements Runnable {
                         for (NetworkIF wantedIF : networkIFlist) {
                             if (wantedIF.getName().equals(networkInterface.getName())) {
                                 activeNetworkIF = wantedIF;
-//                                System.out.println("Active adapter found: " + (wantedIF.getName()));
                                 break;
                             }
                         }
@@ -106,8 +104,6 @@ public class NetworkSpeed implements Runnable {
                     download.set((double) (download2 - download1) / (timestamp2 - timestamp1));
                     upload.set((double) (upload2 - upload1) / (timestamp2 - timestamp1));
 
-//                    System.out.println("Download" + download);
-//                    System.out.println("Network " + Thread.currentThread());
                     download1 = activeNetworkAdapter.getBytesRecv();
                     upload1 = activeNetworkAdapter.getBytesSent();
                     timestamp1 = activeNetworkAdapter.getTimeStamp();
