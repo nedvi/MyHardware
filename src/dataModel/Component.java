@@ -1,7 +1,6 @@
 package dataModel;
 
 import javafx.beans.property.SimpleStringProperty;
-
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.hardware.CentralProcessor.ProcessorIdentifier;
@@ -9,7 +8,6 @@ import oshi.software.os.OperatingSystem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
