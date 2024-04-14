@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.hardware.CentralProcessor.ProcessorIdentifier;
-import oshi.software.os.OperatingSystem;;
+import oshi.software.os.OperatingSystem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

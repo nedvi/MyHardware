@@ -83,12 +83,6 @@
 <dependencies>
 
     <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>17.0.2</version>
-    </dependency>
-
-    <dependency>
         <groupId>com.github.oshi</groupId>
         <artifactId>oshi-core</artifactId>
         <version>6.4.3</version>
