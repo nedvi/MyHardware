@@ -9,7 +9,7 @@
 * Program spouštět přes **Launch.bat**
 * Lze spustit i přes double-click na **MyHardware_stable.jar**, ale to nevyvolá požadavek na admin práva a nebude tak možno získat informace z některých senzorů.
 ### Problémy
-* Na některých zařízeních program není schopen získat informace ze všech senzorů
+* Na některých zařízeních program není schopen získat informace ze všech senzorů ani s admin právy
 ### Screenshots
 #### Dashboard
 ![Alt text](screenshots/dashboard_dark.PNG?raw=true "dashboard_dark")
