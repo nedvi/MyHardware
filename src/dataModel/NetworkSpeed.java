@@ -16,7 +16,7 @@ import java.util.TimerTask;
  * Trida implementujici rozhrani Runnable pro jednoduche pouziti v separatnim vlakne.
  * Slouzi k zisku rychlosti downloadu.
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.05.11
  */
 public class NetworkSpeed implements Runnable {

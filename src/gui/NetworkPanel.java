@@ -20,7 +20,7 @@ import oshi.SystemInfo;
 /**
  * Panel se zobrazenim sitoveho pripojeni
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class NetworkPanel extends BorderPane {

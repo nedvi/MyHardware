@@ -21,7 +21,7 @@ import oshi.hardware.GlobalMemory;
  * Trida reprezentujci RAM panel v GUI.
  * Vizualizace zateze.
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class RAMPanel extends BorderPane {

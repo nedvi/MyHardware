@@ -12,7 +12,7 @@ import oshi.SystemInfo;
 /**
  * Trida reprezentujici vychozi dashboard - tedy to, co uzivatel vidi jako prvni pri spusteni aplikace
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.05.11
  */
 public class Dashboard extends BorderPane {

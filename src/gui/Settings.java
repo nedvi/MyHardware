@@ -25,7 +25,7 @@ import java.util.Optional;
  *  reset timeru + namerenych prumernych, min a max hodnot CPU a GPU,
  *  ukonceni programu.
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class Settings extends BorderPane {

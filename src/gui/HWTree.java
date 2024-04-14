@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Trida reprezentujici strom s informacemi o komponentech PC
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class HWTree extends BorderPane {

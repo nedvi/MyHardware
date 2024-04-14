@@ -30,7 +30,7 @@ import java.util.List;
  * Trida reprezentujci GPU panel v GUI.
  * Vizualizace zateze a teploty.
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class GPUPanel extends BorderPane {

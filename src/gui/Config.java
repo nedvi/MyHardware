@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
  * Trida reprezentujici vizualni konfiguraci (CSS a barvy).
  * Casem bude sjednoceno pouze do CSS
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class Config {

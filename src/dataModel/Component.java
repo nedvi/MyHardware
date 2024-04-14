@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Trida reprezentujici datovy model popisku HW komponent pro tridu gui.HWTree
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class Component {

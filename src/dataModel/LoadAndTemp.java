@@ -17,7 +17,7 @@ import java.util.TimerTask;
  * Trida implementujici rozhrani Runnable pro jednoduche pouziti v separatnim vlakne.
  * Slouzi k zisku teplot CPU a GPU a zateze GPU
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.05.11
  */
 public class LoadAndTemp implements Runnable {
@@ -32,13 +32,13 @@ public class LoadAndTemp implements Runnable {
     private final DoubleProperty gpuLoad = new SimpleDoubleProperty();
 
     /** Property k teplote GPU */
-    private final DoubleProperty gpuTemp = new SimpleDoubleProperty();;
+    private final DoubleProperty gpuTemp = new SimpleDoubleProperty();
 
     /** List s CPU */
     private List<Cpu> cpus;
 
     /** Property k teplote CPU */
-    private final DoubleProperty cpuTemp = new SimpleDoubleProperty();;
+    private final DoubleProperty cpuTemp = new SimpleDoubleProperty();
 
     /**
      * Kazdou sekundu ziskava aktualni hodnoty pomoci Timeru.

@@ -25,16 +25,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Hlavni trida s resenim zadani semestralni prace (ZCU-FAV-UUR)
- * Ucel programu je monitoring HW pocitace
+ * Hlavni trida programu pro monitoring HW pocitace
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class MyHardware extends Application {
 
 	//================================== Konstanty titulku okna ==================================
-	private final String MAIN_TITLE_STR = "MyHardware - SP UUR (Dominik Nedved, A22B0109P)";
+	private final String MAIN_TITLE_STR = "MyHardware";
 	private final Image TITLE_LOGO = new Image("img/myhw-256x256.png");
 	private Stage primaryStage;
 	private BorderPane rootPaneBP;
@@ -217,10 +216,7 @@ public class MyHardware extends Application {
 	private void about() {
 		String aboutAuthorSB =
 				"Author:\t\t\tDominik Nedved\n" +
-				"Study number:\t\tA22B0109P\n" +
-				"Discord:\t\t\tnedvi\n" +
-				"\nFaculty of Applied Sciences\n" +
-				"University of West Bohemia";
+				"Discord:\t\t\tnedvi\n";
 
 		Alert aboutAlert = new Alert(Alert.AlertType.INFORMATION);
 		aboutAlert.setTitle("About");

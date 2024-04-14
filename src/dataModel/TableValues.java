@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 /**
  * Trida reprezentujici hodnoty v tabulce
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class TableValues {

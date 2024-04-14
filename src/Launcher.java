@@ -1,7 +1,7 @@
 /**
  * Spousteci trida pro spustitelny JAR (pres double-click)
  *
- * @author Dominik Nedved, A22B0109P
+ * @author Dominik Nedved
  * @version 2023.06.26
  */
 public class Launcher {
