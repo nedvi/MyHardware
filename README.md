@@ -13,4 +13,10 @@
 ### Screenshots
 #### Dashboard
 ![Alt text](screenshots/dashboard_dark.PNG?raw=true "dashboard_dark")
-![Alt text](screenshots/dashboard_light.PNG?raw=true "dashboard_dark")
+![Alt text](screenshots/dashboard_light.PNG?raw=true "dashboard_light")
+#### HW Tree
+![Alt text](screenshots/hw_tree_dark.PNG?raw=true "hw_tree_dark")
+![Alt text](screenshots/hw_tree_light.PNG?raw=true "hw_tree_light")
+#### Settings
+![Alt text](screenshots/settings_dark.PNG?raw=true "settings_dark")
+![Alt text](screenshots/settings_light.PNG?raw=true "settings_light")
