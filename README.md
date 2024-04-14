@@ -11,3 +11,6 @@
 ### Problémy
 * Na některých zařízeních program není schopen získat informace ze všech senzorů
 ### Screenshots
+#### Dashboard
+![Alt text](screenshots/dashboard_dark.PNG?raw=true "dashboard_dark")
+![Alt text](screenshots/dashboard_light.PNG?raw=true "dashboard_dark")
